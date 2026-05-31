@@ -9,7 +9,7 @@ pipeline {
         PATH = "/opt/apache-maven-3.9.11/bin:$PATH"
         AWS_REGION = 'us-east-1'
         S3_BUCKET = 'pasunuri-taxi-war-bucket-001'
-        ECR_REPO = '642391958117.dkr.ecr.us-east-1.amazonaws.com/taxi-booking-app'
+        ECR_REPO = '073167108093.dkr.ecr.us-east-1.amazonaws.com/taxi-booking-app'
         IMAGE_TAG = "v1.${BUILD_NUMBER}"
     }
 
