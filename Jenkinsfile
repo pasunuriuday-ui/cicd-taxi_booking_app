@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        PATH = "/opt/apache-maven-3.9.15/bin:$PATH"
+        PATH = "/opt/apache-maven-3.9.11/bin:$PATH"
         AWS_REGION = 'us-east-1'
         S3_BUCKET = 'my-war-bucket'
         ECR_REPO = '642391958117.dkr.ecr.us-east-1.amazonaws.com/taxi-booking-app'
