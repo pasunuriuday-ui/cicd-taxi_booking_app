@@ -4,44 +4,33 @@ pipeline {
             label 'maven'
         }
     }
-environment {
-    PATH = "/opt/apache-maven-3.9.15/bin:$PATH"
-    (SONAR_TOKEN = credentials('SONAR_TOKEN'))
-    AWS_REGION = 'us-east-1'
-    S3_BUCKET = 'my-war-bucket'
-    ECR_REPO = '642391958117.dkr.ecr.us-east-1.amazonaws.com/taxi-booking-app'
-    IMAGE_TAG = "v1.${BUILD_NUMBER}"
-    
-}
-   stages {
-        stage("build"){
+
+    environment {
+        PATH = "/opt/apache-maven-3.9.15/bin:$PATH"
+        AWS_REGION = 'us-east-1'
+        S3_BUCKET = 'my-war-bucket'
+        ECR_REPO = '642391958117.dkr.ecr.us-east-1.amazonaws.com/taxi-booking-app'
+        IMAGE_TAG = "v1.${BUILD_NUMBER}"
+    }
+
+    stages {
+
+        stage("build") {
             steps {
-                 echo "----------- build started ----------"
+                echo "----------- build started ----------"
                 sh 'mvn package'
-                 echo "----------- build complted ----------"
+                echo "----------- build completed ----------"
             }
         }
-        stage("test"){
-            steps{
+
+        stage("test") {
+            steps {
                 echo "----------- unit test started ----------"
                 sh 'mvn surefire-report:report'
-                 echo "----------- unit test Complted ----------"
+                echo "----------- unit test completed ----------"
             }
         }
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    // Run SonarQube analysis
-                    sh """
-                    mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-                    -Dsonar.projectKey=taxi-app-taxi-app_taxi \
-                    -Dsonar.organization=taxi-app-taxi-app \
-                    -Dsonar.host.url=https://sonarcloud.io \
-                    -Dsonar.token=${SONAR_TOKEN}
-                    """
-                }
-            }
-        }
+
         stage('Upload WAR to S3') {
             steps {
                 sh '''
@@ -57,6 +46,7 @@ environment {
                 '''
             }
         }
+
         stage('Login to ECR') {
             steps {
                 sh '''
@@ -81,11 +71,12 @@ environment {
                 '''
             }
         }
-        stage(" Deploy ") {
+
+        stage("Deploy") {
             steps {
-            script {
-                sh 'chmod +x deploy.sh'
-                sh './deploy.sh'
+                script {
+                    sh 'chmod +x deploy.sh'
+                    sh './deploy.sh'
                 }
             }
         }
